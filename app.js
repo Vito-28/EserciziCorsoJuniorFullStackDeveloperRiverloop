@@ -6,5 +6,55 @@ navBtn.addEventListener('click', () => {
     nav.classList.toggle('open');
 });
 
+// Chiudi menu quando si clicca su un link
+const navLinks = document.querySelectorAll('.nav-links a');
+navLinks.forEach(link => {
+    link.addEventListener('click', () => {
+        nav.classList.remove('open');
+    });
+});
+
+// Form validation e submit
+const form = document.getElementById('contact-form');
+
+form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    
+    const nome = form.nome.value.trim();
+    const email = form.email.value.trim();
+    const messaggio = form.messaggio.value.trim();
+    
+    // Validazione campi obbligatori
+    if (!nome || !email) {
+        alert('Compila i campi obbligatori');
+        return;
+    }
+    
+    // Validazione email semplice
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        alert('Inserisci un indirizzo email valido');
+        return;
+    }
+    
+    // Simulazione invio
+    alert('Messaggio inviato');
+    form.reset();
+});
+
 // Anno corrente
 document.getElementById('year').textContent = new Date().getFullYear();
+
+// Smooth scroll per i link di navigazione
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+            target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+    });
+});
