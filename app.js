@@ -29,6 +29,13 @@ form.addEventListener('submit', (e) => {
         alert('Compila i campi obbligatori');
         return;
     }
+
+    // Validazione nome
+    const nomeRegex = /^[A-Za-z]+$/;
+    if(!nomeRegex.test(nome)) {
+        alert('Inserisci un nome valido');
+        return;
+    }
     
     // Validazione email semplice
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -44,17 +51,3 @@ form.addEventListener('submit', (e) => {
 
 // Anno corrente
 document.getElementById('year').textContent = new Date().getFullYear();
-
-// Smooth scroll per i link di navigazione
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        if (target) {
-            target.scrollIntoView({
-                behavior: 'smooth',
-                block: 'start'
-            });
-        }
-    });
-});
