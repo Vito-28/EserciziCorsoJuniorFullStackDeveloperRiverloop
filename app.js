@@ -22,7 +22,6 @@ form.addEventListener('submit', (e) => {
     
     const nome = form.nome.value.trim();
     const email = form.email.value.trim();
-    const messaggio = form.messaggio.value.trim();
     
     // Validazione campi obbligatori
     if (!nome || !email) {
@@ -31,7 +30,7 @@ form.addEventListener('submit', (e) => {
     }
 
     // Validazione nome
-    const nomeRegex = /^[A-Za-z]+$/;
+    const nomeRegex = /^[A-Za-z]{4,}$/;
     if(!nomeRegex.test(nome)) {
         alert('Inserisci un nome valido');
         return;
