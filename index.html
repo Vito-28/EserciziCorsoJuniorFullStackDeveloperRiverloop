@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dev Student - Portfolio</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav id="nav">
+            <div class="nav-container">
+                <div class="logo">Dev Student</div>
+                <button id="menuBtn" class="menu-btn">☰</button>
+                <ul class="nav-links">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#about">About</a></li>
+                    <li><a href="#projects">Projects</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <h1>Ciao, sono Dev Student</h1>
+            <p>Sviluppatore Frontend appassionato</p>
+            <a href="#projects" class="btn">Guarda i progetti</a>
+        </section>
+
+        <section id="about">
+            <div class="container">
+                <h2>Chi sono</h2>
+                <p>Sono uno studente di sviluppo web con passione per le tecnologie moderne.</p>
+            </div>
+        </section>
+
+        <section id="projects">
+            <div class="container">
+                <h2>I miei progetti</h2>
+                <ul class="cards">
+                    <li class="card">
+                        <h3>Portfolio Responsive</h3>
+                        <p>Un portfolio personale completamente responsive</p>
+                        <a href="#" class="btn">GitHub</a>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <section id="contact">
+            <div class="container">
+                <h2>Contattami</h2>
+                <form id="contact-form">
+                    <label for="nome">Nome *</label>
+                    <input type="text" id="nome" name="nome" required>
+                    <label for="email">Email *</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="messaggio">Messaggio</label>
+                    <textarea id="messaggio" name="messaggio"></textarea>
+                    <button type="submit" class="btn">Invia</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; <span id="year"></span> Dev Student</p>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
