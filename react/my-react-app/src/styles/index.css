@@ -1,0 +1,110 @@
+:root {
+ --bg:#f7f7fb;  /* Colore di sfondo globale */
+ --panel: #ffffff; /* Colore di sfondo delel card */
+ --text:#1f2937;   /* Colore testo principale */
+ --muted:#6b7280;  /* Colore testo attenuato */
+ --border:#e5e7eb; /* Colore bordi */
+ --primary:#7c3aed;  /* Colore principale */
+ --radius:12px;        /* raggio degli angoli arrotondati */
+}
+
+*{box-sizing: border-box}   /* Include padding/border nel calcolo delle dimensioni */
+html, body {margin:0}       /* Rimuovi margini di dafault del browser */
+
+body {
+  font-family:ui-sans-serif,system-ui,-apple-system, "Segoe UI", Roboto,Arial;
+  background: var(--bg);
+  color: var(--text);
+  line-height:1.55;
+}
+
+.container {
+  max-width:900px; /* Larghezza massima dell'area contenuti */
+  margin-inline: auto; /* Centrare orizzontalmente */
+  padding: 20px;      /* Spaziatura interna  */
+}
+
+.header {
+  margin: 10px 0 16px;  /* Margine sopra/sotto per separare dal resto  */
+}
+
+.title {
+  font-size: clamp(24px,4vw,36px);  /* Titolo responsive: tra 24 e 36 px in base alla viewport */
+  margin: 0 0 6px;  /* Azzerare magine sopra, 6px sotto */
+}
+
+.muted {
+  color: var(--muted);  /* Testo attenuato (descrizioni, sottotitoli) */
+  margin:0;
+}
+
+.card {
+  background: var(--panel);   /* Sfondo della card */
+  border: 1px solid var(--border); /* Bordo sottile a contornare */
+  border-radius: var(--radius);   /* Angoli arrotondati uniformi */
+  padding: 14px;
+  margin: 12px 0;    /* Spazio in verticale tra le mie card */
+}
+
+.search {
+  display: flex;    /* Allinea testo "Cerca:" e input sulla stessa riga */
+  gap:10px;         /* Spazio tra etichetta e input */
+  align-items: center;  /* Centrare verticalmente */
+  font-weight: 600;
+}
+
+.search input {
+  flex:1;  /* input occupa tutto lo spazio disponibile */
+  padding:10px 12px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: #fff;
+  color: var(--text);
+}
+
+.cards {
+  list-style: none;  /* Rimuovi i pallini dalla lista */
+  padding:0;
+  margin: 14px 0;
+  display: grid;  /* Layout a griglia responsivo */
+  gap: 14px;
+  grid-template-columns: repeat(auto-fit,minmax(240px,1fr));  /* Colonne auto-fit; ogni card min240px, max 1fr */
+}
+
+.tags {
+  display: flex;
+  gap:6px;
+  list-style:none;
+  padding: 0;
+  margin:8px 0 0;
+}
+
+.tag {
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.footer {
+  border-top: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 14px;
+  text-align: center;
+  padding: 16px 0;
+  margin-top: 24px;
+}
+
+/* Colore rosso per errori / nessun risultato*/
+.error {
+  color: #dc2626;
+  font-weight: 600;
+}
+
+
+/* Colore vered per più risultati */
+.success {
+  color: #16a34a;
+  font-weight: 600;
+}
