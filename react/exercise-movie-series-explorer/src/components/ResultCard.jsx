@@ -1,3 +1,4 @@
+import NoImage from "../assets/image/no-image.png"; //import dell’immagine di default
 // Il componente riceve due props:
 // item: un oggetto che rappresenta un singolo show/film (id, title, year, poster, ecc.)
 // onSelect: una funzione da chiamare quando l'utente clicca sulla card
@@ -12,7 +13,7 @@ export default function ResultCard({ item, onSelect }) {
       {/* Immagine del poster */}
       {/* Se item.poster esiste viene mostrato, altrimenti viene mostrata un'immagine di fallback */}
       {/* alt è importante per accessibilità e SEO: descrive l'immagine */}
-      <img src={item.poster || "../assets/no-image.png"} alt={item.title} />
+      <img src={item.poster || NoImage} alt={item.title} />
       
       {/* Titolo dello show */}
       

@@ -11,71 +11,30 @@ const API_URL = "https://api.tvmaze.com";
 // Definisce e esporta una funzione asincrona searchTitles che esegue una ricerca per titolo su TVMaze. 
 // query è la stringa di ricerca dell'utente; 
 // page è il numero di pagina client-side, di default pari a 1.
+// 
+
 export async function searchTitles(query, page = 1) {
-
-    // Gestione query vuota:
-    // query?.trim() usa optional chaining per evitare errori se query è undefined/null.
-    // trim() rimuove spazi bianchi iniziali/finali.
-    // !query?.trim() è true se query è undefined, null, o una stringa vuota dopo aver tolto spazi.
     if (!query?.trim()) {
-
-        // Se la query è vuota o composta solo da spazi, ritorniamo subito
-        // un oggetto che rappresenta risultati vuoti invece di chiamare l'API.
-        // Questo evita chiamate inutili.
         return { items: [], totalResults: 0, totalPages: 0 };
     }
 
-    // Chiamata API:
-    // buildiamo l'URL di ricerca con template literal e encodeURIComponent per
-    // codificare correttamente caratteri speciali nella query (es. spazi, &, ? ecc).
-
-    // fetch() restituisce una Promise che risolve con un Response;
-    // usiamo await per attendere il completamento della richiesta in modo sincrono-leggibile.
     const res = await fetch(`${API_URL}/search/shows?q=${encodeURIComponent(query)}`);
-
-    // Gestione errori HTTP:
-    // Se la risposta non è ok, lanciamo un'eccezione per delegare la gestione
-    // dell'errore al chiamante.
     if (!res.ok) throw new Error("Errore nella chiamata di ricerca");
-
-    // Otteniamo il body della risposta in formato JSON.
-    // res.json() ritorna una Promise che risolve con il parsing dell'JSON.
-    // La struttura restituita da TVMaze per /search/shows è un array di oggetti { score, show }.
-    const data = await res.json(); // [{ score, show }, ...]
-
-    // TVMaze non ha paginazione nativa su /search e gestiamo client-side.
-    // per uniformare i risultati alla UI trasformiamo ogni elemento
-    // con la funzione normalizeSearchItem, passando la proprietà show che contiene i dati reali.
+    
+    const data = await res.json();
     const normalized = data.map(d => normalizeSearchItem(d.show));
-
-    // Paginiamo client-side: definiamo la dimensione di pagina (numero di item per pagina).
-    // Scegliendo un valore fisso (10) abbiamo un controllo semplice su quanti risultati mostrare.
+    
     const pageSize = 10;
-
-    // Numero totale di risultati (dopo normalizzazione).
-    // utile per mostrare X risultati nella UI e per calcolare il numero di pagine.
     const totalResults = normalized.length;
-
-    // Calcolo del numero totale di pagine.
-    // Math.ceil(totalResults / pageSize) arrotonda verso l'alto, es. 15 risultati, pageSize 10 => 2 pagine.
-    // Math.max(1, ...) assicura che venga restituito almeno 1 come numero di pagine anche se totalResults è 0.
-    // questo design fa sì che, in assenza di risultati, totalPages sia 1;
-    const totalPages = Math.max(1, Math.ceil(totalResults / pageSize));
-
-    // Indice di partenza per l'array slice in base alla pagina richiesta.
-    // (page - 1) perché qui le pagine sono 1-based (page = 1 => start = 0).
-    // se page è minore di 1, start può diventare negativo: è buona pratica validare page prima di usarlo.
+    
+    // ✅ FIX: Calcola totalPages senza Math.max forzato
+    // Se non ci sono risultati, totalPages = 0
+    // Altrimenti calcola normalmente
+    const totalPages = totalResults === 0 ? 0 : Math.ceil(totalResults / pageSize);
+    
     const start = (page - 1) * pageSize;
-
-    // Otteniamo gli elementi della pagina corrente usando slice.
-    // slice(start, end) ritorna gli elementi dall'indice start incluso fino a end escluso.
-    // se start è oltre la lunghezza, slice restituisce [].
     const items = normalized.slice(start, start + pageSize);
 
-    // Ritorniamo un oggetto che contiene:
-    // items: array degli elementi per la pagina richiesta
-    // totalResults: numero complessivo di risultati disponibili
-    // totalPages: numero totale di pagine calcolato client-side
     return { items, totalResults, totalPages };
 }
 
@@ -135,6 +94,8 @@ function normalizeSearchItem(show) {
         // show.rating?.average può essere undefined o null; usiamo l'operatore nullish coalescing (??)
         // per distinguere tra valori 0 e undefined/null; qui, se è undefined/null ritorniamo null.
         rating: show.rating?.average ?? null,
+
+        genres: show.genres || [], // filtro genere
     };
 }
 

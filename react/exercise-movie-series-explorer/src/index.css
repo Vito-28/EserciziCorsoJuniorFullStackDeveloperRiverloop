@@ -1,68 +1,575 @@
-:root {
-  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
-
-  color-scheme: light dark;
-  color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
-
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+/* per uniformare il comportamento su tutti i browser */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
 }
 
-a {
-  font-weight: 500;
-  color: #646cff;
-  text-decoration: inherit;
-}
-a:hover {
-  color: #535bf2;
+/* Impostazioni di base per HTML e body */
+html {
+  font-size: 16px; /* 1rem = 16px */
+  scroll-behavior: smooth; /* Scroll fluido per i link interni */
 }
 
 body {
-  margin: 0;
-  display: flex;
-  place-items: center;
-  min-width: 320px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  line-height: 1.6;
+  color: #1e293b; /* Default light mode */
+  background-color: #ffffff; /* Default light mode */
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Body in dark mode */
+body.dark {
+  color: #f8fafc;
+  background-color: #0f172a;
+}
+
+/* ===== VARIABILI CSS (CUSTOM PROPERTIES) ===== */
+/* Variabili per Light Mode */
+:root {
+  /* Colori principali */
+  --primary-color: #2563eb;
+  --primary-hover: #1d4ed8;
+  --secondary-color: #64748b;
+  
+  /* Colori di sfondo */
+  --bg-color: #ffffff;
+  --card-bg: #f8fafc;
+  --header-bg: #f1f5f9;
+  
+  /* Colori del testo */
+  --text-color: #1e293b;
+  --text-muted: #64748b;
+  --text-light: #94a3b8;
+  
+  /* Colori di stato */
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  
+  /* Ombre */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  
+  /* Bordi */
+  --border-color: #e2e8f0;
+  --border-radius: 8px;
+  --border-radius-lg: 12px;
+  
+  /* Spaziature */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+}
+
+/* Variabili per Dark Mode */
+.app.dark {
+  --bg-color: #0f172a;
+  --card-bg: #1e293b;
+  --header-bg: #334155;
+  --text-color: #f8fafc;
+  --text-muted: #cbd5e1;
+  --text-light: #94a3b8;
+  --border-color: #475569;
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
+.app {
   min-height: 100vh;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-md);
 }
 
-h1 {
-  font-size: 3.2em;
-  line-height: 1.1;
+/* ===== HEADER ===== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg);
+  background-color: var(--header-bg);
+  border-radius: var(--border-radius-lg);
+  margin-bottom: var(--space-xl);
+  box-shadow: var(--shadow-sm);
 }
 
-button {
-  border-radius: 8px;
-  border: 1px solid transparent;
-  padding: 0.6em 1.2em;
-  font-size: 1em;
-  font-weight: 500;
-  font-family: inherit;
-  background-color: #1a1a1a;
+header h1 {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin: 0;
+}
+
+/* Bottone toggle Dark/Light Mode */
+header button {
+  padding: var(--space-sm) var(--space-md);
+  border: none;
+  border-radius: var(--border-radius);
+  background-color: var(--primary-color);
+  color: white;
+  font-size: 0.9rem;
   cursor: pointer;
-  transition: border-color 0.25s;
-}
-button:hover {
-  border-color: #646cff;
-}
-button:focus,
-button:focus-visible {
-  outline: 4px auto -webkit-focus-ring-color;
+  transition: all 0.2s ease;
+  min-height: 44px; /* Accessibilità: target minimo tocco */
 }
 
-@media (prefers-color-scheme: light) {
+header button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+header button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* ===== BARRA DI RICERCA ===== */
+.search-bar {
+  margin-bottom: var(--space-xl);
+}
+
+.search-bar input {
+  width: 100%;
+  padding: var(--space-md);
+  font-size: 1.1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  transition: all 0.2s ease;
+}
+
+.search-bar input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.search-bar input::placeholder {
+  color: var(--text-muted);
+}
+
+/* ===== FILTRO GENERI ===== */
+select {
+  width: 100%;
+  max-width: 200px;
+  padding: var(--space-sm) var(--space-md);
+  margin-bottom: var(--space-xl);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+}
+
+/* ===== STATI DI CARICAMENTO E ERRORE ===== */
+p {
+  margin-bottom: var(--space-md);
+  color: var(--text-color);
+}
+
+.error {
+  color: var(--error-color);
+  font-weight: 600;
+  padding: var(--space-md);
+  background-color: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: var(--border-radius);
+  margin-bottom: var(--space-md);
+}
+
+/* ===== GRIGLIA RISULTATI ===== */
+.results-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-lg);
+  margin-bottom: var(--space-2xl);
+}
+
+/* ===== CARD RISULTATI ===== */
+.result-card {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  overflow: hidden;
+  box-shadow: var(--shadow-md);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: 1px solid var(--border-color);
+}
+
+.result-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.result-card:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.result-card img {
+  width: 100%;
+  height: 280px;
+  object-fit: cover;
+  display: block;
+}
+
+.result-card h3 {
+  padding: var(--space-md);
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text-color);
+  margin-bottom: var(--space-xs);
+  line-height: 1.4;
+}
+
+.result-card span {
+  display: block;
+  padding: 0 var(--space-md) var(--space-md);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ===== PAGINAZIONE ===== */
+.pagination {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-sm);
+  margin: var(--space-2xl) 0;
+  flex-wrap: wrap;
+}
+
+.pagination button {
+  padding: var(--space-sm) var(--space-md);
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background-color: var(--card-bg);
+  color: var(--text-color);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 44px;
+  min-height: 44px;
+}
+
+.pagination button:hover {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+.pagination button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.pagination button.active {
+  background-color: var(--primary-color);
+  color: white;
+  border-color: var(--primary-color);
+}
+
+/* ===== SEZIONE PREFERITI ===== */
+.favorites {
+  margin-top: var(--space-2xl);
+  padding-top: var(--space-2xl);
+  border-top: 2px solid var(--border-color);
+}
+
+.favorites h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: var(--space-xl);
+}
+
+.favorites-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: var(--space-lg);
+}
+
+/* ===== MODAL ===== */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: var(--space-md);
+}
+
+.modal-content {
+  background-color: var(--card-bg);
+  border-radius: var(--border-radius-lg);
+  max-width: 800px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--shadow-lg);
+  display: flex;
+  gap: var(--space-xl);
+  padding: var(--space-xl);
+}
+
+.modal-image {
+  flex-shrink: 0;
+}
+
+.modal-image img {
+  width: 250px;
+  height: auto;
+  border-radius: var(--border-radius);
+  object-fit: cover;
+}
+
+.modal-info {
+  flex: 1;
+}
+
+.modal-info h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text-color);
+  margin-bottom: var(--space-md);
+}
+
+.modal-info p {
+  margin-bottom: var(--space-md);
+  color: var(--text-color);
+  line-height: 1.6;
+}
+
+.modal-info p strong {
+  color: var(--primary-color);
+  font-weight: 600;
+}
+
+.modal-info button {
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--primary-color);
+  color: white;
+  border: none;
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-top: var(--space-md);
+  min-height: 44px;
+}
+
+.modal-info button:hover {
+  background-color: var(--primary-hover);
+  transform: translateY(-1px);
+}
+
+.modal-info button:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* ===== RESPONSIVE DESIGN ===== */
+/* Tablet */
+@media (max-width: 768px) {
+  .app {
+    padding: var(--space-sm);
+  }
+  
+  header {
+    flex-direction: column;
+    gap: var(--space-md);
+    text-align: center;
+  }
+  
+  header h1 {
+    font-size: 1.5rem;
+  }
+  
+  .results-grid,
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: var(--space-md);
+  }
+  
+  .modal-content {
+    flex-direction: column;
+    padding: var(--space-lg);
+    margin: var(--space-md);
+  }
+  
+  .modal-image img {
+    width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
+  }
+  
+  .pagination {
+    gap: var(--space-xs);
+  }
+  
+  .pagination button {
+    min-width: 40px;
+    min-height: 40px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Mobile */
+@media (max-width: 480px) {
+  header h1 {
+    font-size: 1.3rem;
+  }
+  
+  .search-bar input {
+    font-size: 1rem;
+  }
+  
+  .results-grid,
+  .favorites-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  
+  .result-card h3 {
+    font-size: 1rem;
+    padding: var(--space-sm);
+  }
+  
+  .result-card span {
+    padding: 0 var(--space-sm) var(--space-sm);
+    font-size: 0.8rem;
+  }
+  
+  .result-card img {
+    height: 200px;
+  }
+  
+  .modal-content {
+    padding: var(--space-md);
+  }
+  
+  .modal-info h2 {
+    font-size: 1.4rem;
+  }
+}
+
+/* ===== ACCESSIBILITÀ ===== */
+/* Focus visibile per navigazione da tastiera */
+*:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Nasconde elementi solo visivamente (per screen reader) */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Rispetto per preferenze di movimento ridotto */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Migliora contrasto per preferenze ad alto contrasto */
+@media (prefers-contrast: high) {
   :root {
-    color: #213547;
-    background-color: #ffffff;
+    --border-color: #000000;
+    --text-muted: var(--text-color);
   }
-  a:hover {
-    color: #747bff;
+  
+  .app.dark {
+    --border-color: #ffffff;
+    --text-muted: var(--text-color);
   }
-  button {
-    background-color: #f9f9f9;
+}
+
+/* ===== ANIMAZIONI AGGIUNTIVE ===== */
+/* Fade in per elementi che appaiono */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
   }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Animazione per le card quando appaiono */
+.result-card {
+  animation: fadeIn 0.3s ease-out;
+}
+
+/* ===== UTILITÀ ===== */
+/* Classe per centrare testo */
+.text-center {
+  text-align: center;
+}
+
+/* Classe per nascondere elementi */
+.hidden {
+  display: none;
+}
+
+/* Classe per elementi in caricamento */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+/* ===== MIGLIORAMENTI UX ===== */
+/* Effetto di selezione del testo */
+::selection {
+  background-color: rgba(37, 99, 235, 0.2);
+  color: var(--text-color);
+}
+
+/* Scrollbar personalizzata per WebKit browsers */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--card-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--border-color);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--text-muted);
 }

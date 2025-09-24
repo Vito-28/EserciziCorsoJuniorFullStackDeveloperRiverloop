@@ -1,40 +1,49 @@
-// Esportiamo il componente React come default, riceve 4 props:
-// detail: oggetto contenente i dettagli del titolo selezionato
-// onClose: funzione per chiudere il modal
-// onToggleFavorite: funzione per aggiungere/rimuovere dai preferiti
-// isFavorite: booleano che indica se il titolo è già nei preferiti
+// Importa motion dalla libreria framer-motion per creare animazioni
+import { motion } from "framer-motion";
+
+// Definisce un componente React chiamato DetailModal
+// Riceve alcune proprietà (props) dal genitore:
+// - detail: contiene i dettagli del film o serie da mostrare
+// - onClose: funzione per chiudere la modale
+// - onToggleFavorite: funzione per aggiungere o togliere dai preferiti
+// - isFavorite: true se il film/serie è già tra i preferiti
 export default function DetailModal({ detail, onClose, onToggleFavorite, isFavorite }) {
 
-  // Se non è stato passato alcun dettaglio (detail è null o undefined),
-  // non renderizziamo nulla e ritorniamo null
+  // Controlla se non ci sono dettagli, in quel caso non mostra niente
   if (!detail) return null;
 
+  // Ritorna il JSX che rappresenta la modale con animazioni
   return (
-    <div className="modal">
+    <motion.div
+      className="modal-overlay" // Overlay semi-trasparente dietro la modale
+      initial={{ opacity: 0 }}  // All'inizio è invisibile
+      animate={{ opacity: 1 }}  // Poi diventa visibile
+      exit={{ opacity: 0 }}     // Quando chiude, torna invisibile
+      onClick={onClose}         // Cliccando sull'overlay si chiude la modale
+    >
+      <motion.div
+        className="modal-content"           // Contenitore interno della modale
+        initial={{ scale: 0.8 }}            // Parte più piccolo
+        animate={{ scale: 1 }}              // Scala normale
+        exit={{ scale: 0.8 }}               // Ridotto quando chiude
+        onClick={(e) => e.stopPropagation()} // Blocca la chiusura se clicco dentro la modale
+      >
+        <div className="modal-image">
+          <img src={detail.poster} alt={detail.title} /> {/* Mostra l'immagine del film/serie */}
+        </div>
 
-      {/* Bottone per chiudere il modal, esegue la funzione onClose al click */}
-      <button onClick={onClose}>Chiudi</button>
-
-      {/* Mostriamo l'immagine del titolo */}
-      <img src={detail.poster} alt={detail.title} />
-
-      {/* Titolo e anno di uscita */}
-      <h2>{detail.title} ({detail.year})</h2>
-
-      {/* Mostriamo la trama o il riassunto del titolo */}
-      {/* dangerouslySetInnerHTML serve per interpretare HTML contenuto in summaryHTML */}
-      <p dangerouslySetInnerHTML={{ __html: detail.summaryHTML }} />
-
-      {/* Lista dei generi */}
-      {/* detail.genres è un array → join(", ") converte l'array in stringa separata da virgole */}
-      <p><strong>Generi:</strong> {detail.genres.join(", ")}</p>
-
-      {/* Bottone per aggiungere o rimuovere dai preferiti */}
-      {/* Al click esegue onToggleFavorite passando il dettaglio del titolo */}
-      {/* Il testo del bottone cambia a seconda se è già un preferito */}
-      <button onClick={() => onToggleFavorite(detail)}>
-        {isFavorite ? "★ Rimuovi dai preferiti" : "☆ Aggiungi ai preferiti"}
-      </button>
-    </div>
+        <div className="modal-info">
+          <h2>{detail.title} ({detail.year})</h2> {/* Mostra titolo e anno */}
+          <p dangerouslySetInnerHTML={{ __html: detail.summaryHTML }} /> {/* Mostra il sommario con eventuale HTML */}
+          <p><strong>Generi:</strong> {detail.genres.join(", ")}</p> {/* Mostra i generi separati da virgola */}
+          <p><strong>Lingua:</strong> {detail.language}</p> {/* Mostra la lingua */}
+          <p><strong>Status:</strong> {detail.status}</p> {/* Mostra lo status (es. in corso, terminato) */}
+          <p><strong>Runtime:</strong> {detail.runtime} min</p> {/* Mostra durata in minuti */}
+          <button onClick={() => onToggleFavorite(detail)}> {/* Pulsante per aggiungere/rimuovere dai preferiti */}
+            {isFavorite ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"} {/* Cambia testo in base allo stato */}
+          </button>
+        </div>
+      </motion.div>
+    </motion.div>
   );
 }
